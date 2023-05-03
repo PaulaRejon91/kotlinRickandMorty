@@ -24,6 +24,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val nameTextView=findViewById<TextView>(R.id.tvName)
+        val headerImageView = findViewById<ImageView>(R.id.headerImageView)
+        val aliveTextView = findViewById<TextView>(R.id.aliveTextView)
+        val originTextView = findViewById<TextView>(R.id.originTextView)
+        val speciesTextView = findViewById<TextView>(R.id.speciesTextView)
+        val genderImageView = findViewById<ImageView>(R.id.genderImageView)
 
         val moshi = Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
@@ -36,13 +42,30 @@ class MainActivity : AppCompatActivity() {
 
        val rickAndMortyService: RickAndMortyService = retrofit.create(RickAndMortyService::class.java)
 
-        rickAndMortyService.getCharacterById().enqueue(object:Callback<Any>{
+        rickAndMortyService.getCharacterById(10).enqueue(object:Callback<GetCharacterByIdResponse>{
 
-            override  fun onResponse(call: Call<Any>, response: Response<Any>) {
+            override  fun onResponse(call: Call<GetCharacterByIdResponse>, response: Response<GetCharacterByIdResponse>) {
                 Log.i("MainActivity", response.toString())
+
+                if (!response.isSuccessful) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "llamada sin éxito!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+                val body = response.body()!!
+                nameTextView.text=body.name
+                aliveTextView.text=body.status
+                speciesTextView.text=body.species
+                originTextView.text=body.origin.name
+
+                Picasso.get().load(body.image).into(headerImageView)
+
             }
 
-            override fun onFailure(call: Call<Any>, t: Throwable) {
+            override fun onFailure(call: Call<GetCharacterByIdResponse>, t: Throwable) {
                 Log.i("MainActivity",t.message?: "Null message")
             }
         })
