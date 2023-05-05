@@ -1,4 +1,4 @@
-package com.example.myapp.data.ui.viewmodel
+package com.example.myapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,18 +9,18 @@ import com.example.myapp.data.network.CharacterRepository
 import kotlinx.coroutines.launch
 
 class CharacterViewModel : ViewModel() {
-    private val repository = CharacterRepository()
-
-    private val _characterByIdLiveData = MutableLiveData<GetCharacterByIdResponse>()
-    val characterByIdLiveData: LiveData<GetCharacterByIdResponse?> = _characterByIdLiveData
-
-    fun refreshCharacter(characterId: Int) {
-        viewModelScope.launch {
-            val response = repository.getCharacterById(characterId)
-
-            _characterByIdLiveData.postValue(response)
-        }
-    }
+//    private val repository = CharacterRepository()
+//
+//    private val _characterByIdLiveData = MutableLiveData<GetCharacterByIdResponse>()
+//    val characterByIdLiveData: LiveData<GetCharacterByIdResponse?> = _characterByIdLiveData
+//
+//    fun refreshCharacter(characterId: Int) {
+//        viewModelScope.launch {
+//            val response = repository.getCharacterById(characterId)
+//
+////            _characterByIdLiveData.postValue(response)
+//        }
+//    }
 }
 
 /*En este código, la clase CharacterViewModel extiende la clase ViewModel y contiene

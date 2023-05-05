@@ -1,27 +1,24 @@
 package com.example.myapp
 
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app_rickandmorty.R
-import com.example.myapp.data.model.GetCharacterByIdResponse
+import com.example.myapp.data.model.CharacterModel
+import com.example.myapp.databinding.MainItemBinding
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
-class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    val imageView = view.findViewById<TextView>(R.id.image_view)
-    val nameTextView = view.findViewById<TextView>(R.id.name_text_view)
-    val statusTextView = view.findViewById<TextView>(R.id.status_text_view)
-    val speciesTextView = view.findViewById<TextView>(R.id.species_text_view)
-    val originTextView = view.findViewById<TextView>(R.id.origin_text_view)
+class CharacterViewHolder@Inject constructor(val binding: MainItemBinding):
+    RecyclerView.ViewHolder(binding.root){
 
-    fun render(characterListModel: GetCharacterByIdResponse) {
-//        Picasso.get().load(characterListModel.image).into(imageView)
-        nameTextView.text = characterListModel.name
-        statusTextView.text = characterListModel.status
-        speciesTextView.text = characterListModel.species
-        originTextView.text = characterListModel.origin.name
+
+    fun bind( characterListModel: CharacterModel, onItemSelected: (Int)-> Unit,) {
+        binding.root.setOnClickListener { onItemSelected (characterListModel.characterId) }
+        Picasso.get().load(characterListModel.image).into(binding.ivCharacter)
+        binding.nameTextView.text = characterListModel.name
+        binding.statusTextView.text = characterListModel.status
+        binding.speciesTextView.text = characterListModel.species
+        binding.originTextView.text= characterListModel.origin.origin
+
     }
 
 }

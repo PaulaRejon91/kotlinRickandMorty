@@ -1,36 +1,37 @@
 package com.example.myapp
+
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app_rickandmorty.R
-import com.example.myapp.data.model.GetCharacterByIdResponse
-import com.squareup.picasso.Picasso
-import retrofit2.Response
+import com.example.myapp.data.model.CharacterModel
+import com.example.myapp.databinding.MainItemBinding
+import javax.inject.Inject
 
 
-//no sé si tengo que poner dentro getcharacterbyidresponse
+class CharacterAdapter @Inject constructor(var characterList: List<CharacterModel> = emptyList(),private val onItemSelected: (Int) -> Unit) :
+    RecyclerView.Adapter<CharacterViewHolder>() {
 
-class CharacterAdapter(private val characterList:List<GetCharacterByIdResponse>):RecyclerView.Adapter<CharacterViewHolder>(){
+    fun refreshList(list: List<CharacterModel>) {
+        this.characterList = list
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-     return CharacterViewHolder(layoutInflater.inflate(R.layout.main_item,parent,false))
+        val binding = MainItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return CharacterViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
 
-        val item= characterList[position]
-        holder.render(item)
+    override fun onBindViewHolder(viewholder: CharacterViewHolder, position: Int) {
+
+        var item = characterList[position]
+        viewholder.bind(item,onItemSelected)
     }
 
     override fun getItemCount(): Int {
         return characterList.size
     }
 }
-
-
 
 
 //
